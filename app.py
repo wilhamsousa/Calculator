@@ -10,6 +10,19 @@ def calculate(number1, number2, operator):
     
 print('start')
 
+def convertToArray():
+    import ast
+
+    # A string fornecida
+    minha_string = '("4",("2","3","*"),"+")'
+    minha_string = minha_string.replace('(', '[').replace(')', ']')
+    #minha_string = '["4",["2","3","*"],"+"]'
+
+    # Removendo os caracteres não numéricos e convertendo para uma lista
+    lista_simplificada = ast.literal_eval(minha_string)
+    print(lista_simplificada)
+convertToArray()
+
 expressions = []
 expressions.append(['2', '3', '+'])
 expressions.append(['2', '3', '-'])
@@ -25,7 +38,7 @@ def calculateSubExpression(array):
         return calculateExpressions(array)
     else: return None
     
-        
+finalResults = [] 
 
 def calculateExpressions(expressions):
     memory = 0
@@ -43,23 +56,23 @@ def calculateExpressions(expressions):
         if (expression[0].replace('.', '', 1).isdigit() and expression[1].replace('.', '', 1).isdigit()):
             result = calculate(float(expression[0]), float(expression[1]), expression[2])
             stack.append(result)
-            print(result)
+            finalResults.append(result)
 
         elif expression[1] == 'MEM':
             memory = float(expression[0])
-            print(memory)
             stack.append(memory)
 
         elif expression[0] == 'MEM':
             result = calculate(memory, float(expression[1]), expression[2])
             stack.append(result)
-            print(result)
+            finalResults.append(result)
 
         elif expression[1] == 'RES':
             result = calculate(float(stack[int(expression[0])]), float(expression[2]), expression[3])
-            print(result)
+            finalResults.append(result)
             stack.append(result)
     
     return str(result)
 
 calculateExpressions(expressions)
+print(finalResults)
